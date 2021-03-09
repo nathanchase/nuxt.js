@@ -67,7 +67,9 @@
       <v-list>
         <v-list-tile @click.native="right = !right">
           <v-list-tile-action>
-            <v-icon light>compare_arrows</v-icon>
+            <v-icon light>
+              compare_arrows
+            </v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
         </v-list-tile>
@@ -81,7 +83,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       clipped: false,
       drawer: true,

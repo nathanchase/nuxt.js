@@ -3,19 +3,21 @@ import PurgecssPlugin from 'purgecss-webpack-plugin'
 import glob from 'glob-all'
 
 class TailwindExtractor {
-  static extract(content) {
-    return content.match(/[A-z0-9-:/]+/g) || []
+  static extract (content) {
+    return content.match(/[A-Za-z0-9-:/]+/g) || []
   }
 }
 
 export default {
   build: {
     extractCSS: true,
-    postcss: [
-      require('tailwindcss')('./tailwind.js'),
-      require('autoprefixer')
-    ],
-    extend(config, { isDev }) {
+    postcss: {
+      plugins: {
+        tailwindcss: path.resolve('./tailwind.js')
+      },
+      preset: { autoprefixer: { grid: true } }
+    },
+    extend (config, { isDev }) {
       if (!isDev) {
         config.plugins.push(
           new PurgecssPlugin({

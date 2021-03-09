@@ -11,7 +11,11 @@
         <tr v-for="(value, key) in cookies" :key="key">
           <td>{{ key }}</td>
           <td>{{ value }}</td>
-          <td><button @click="removeCookie(key)">Remove</button></td>
+          <td>
+            <button @click="removeCookie(key)">
+              Remove
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -19,7 +23,9 @@
     <form @submit.prevent="addCookie">
       <input v-model="newCookie.key" type="text" placeholder="Key" class="key">:
       <input v-model="newCookie.value" type="text" placeholder="Value" class="value">
-      <button type="submit">Add</button>
+      <button type="submit">
+        Add
+      </button>
     </form>
   </div>
 </template>
@@ -33,14 +39,14 @@ export default {
     }
   }),
   computed: {
-    cookies() {
+    cookies () {
       return this.$cookies.cookies
     }
   },
   methods: {
-    addCookie() {
+    addCookie () {
       // Make sure the cookie is not empty
-      if (!this.newCookie.key || !this.newCookie.value) return
+      if (!this.newCookie.key || !this.newCookie.value) { return }
       // Sanitize the key to avoid spaces
       const cookieKey = this.newCookie.key.replace(/\s/g, '-')
       // Add the cookie
@@ -48,7 +54,7 @@ export default {
       // Reset newCookie data
       this.newCookie.key = this.newCookie.value = ''
     },
-    removeCookie(key) {
+    removeCookie (key) {
       this.$cookies.remove(key)
     }
   }

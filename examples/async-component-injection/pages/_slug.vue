@@ -1,6 +1,6 @@
 <template>
   <div class="post">
-    <component :is="component" />
+    <Component :is="component" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ const getPost = slug => ({
 })
 
 export default {
-  beforeCreate() {
+  beforeCreate () {
     this.component = () => getPost(this.$route.params.slug)
   }
 }

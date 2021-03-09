@@ -4,8 +4,14 @@
     <p>msg: {{ msg }}</p>
     <p>env: {{ env }}</p>
     <p>computed msg: {{ computedMsg }}</p>
-    <button @click="greet">Greet</button>
-    <p><nuxt-link to="/about">About page</nuxt-link></p>
+    <button @click="greet">
+      Greet
+    </button>
+    <p>
+      <NuxtLink to="/about">
+        About page
+      </NuxtLink>
+    </p>
   </div>
 </template>
 
@@ -17,7 +23,7 @@ export default
 @Component
 class Child extends Base {
   // override parent method
-  greet() {
+  greet () {
     console.log('child greeting: ' + this.msg) // eslint-disable-line no-console
   }
 }

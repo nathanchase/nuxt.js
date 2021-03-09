@@ -1,34 +1,45 @@
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-core'
+import { Launcher } from 'chrome-launcher'
 
 export default class Browser {
-  async start(options = {}) {
+  async start (options = {}) {
     // https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions
-    this.browser = await puppeteer.launch(
-      Object.assign(
-        {
-          args: ['--no-sandbox', '--disable-setuid-sandbox'],
-          executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
-        },
-        options
-      )
-    )
+    const _opts = {
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ],
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      ...options
+    }
+
+    if (!_opts.executablePath) {
+      _opts.executablePath = Launcher.getInstallations()[0]
+    }
+
+    this.browser = await puppeteer.launch(_opts)
   }
 
-  async close() {
-    if (!this.browser) return
+  async close () {
+    if (!this.browser) { return }
     await this.browser.close()
   }
 
-  async page(url) {
-    if (!this.browser) throw new Error('Please call start() before page(url)')
+  async page (url, globalName = 'nuxt') {
+    if (!this.browser) { throw new Error('Please call start() before page(url)') }
     const page = await this.browser.newPage()
     await page.goto(url)
-    await page.waitForFunction('!!window.$nuxt')
+    page.$nuxtGlobalHandle = `window.$${globalName}`
+    await page.waitForFunction(`!!${page.$nuxtGlobalHandle}`)
     page.html = () =>
       page.evaluate(() => window.document.documentElement.outerHTML)
-    page.$text = selector => page.$eval(selector, el => el.textContent)
-    page.$$text = selector =>
-      page.$$eval(selector, els => els.map(el => el.textContent))
+    page.$text = (selector, trim) => page.$eval(selector, (el, trim) => {
+      return trim ? el.textContent.replace(/^\s+|\s+$/g, '') : el.textContent
+    }, trim)
+    page.$$text = (selector, trim) =>
+      page.$$eval(selector, (els, trim) => els.map((el) => {
+        return trim ? el.textContent.replace(/^\s+|\s+$/g, '') : el.textContent
+      }), trim)
     page.$attr = (selector, attr) =>
       page.$eval(selector, (el, attr) => el.getAttribute(attr), attr)
     page.$$attr = (selector, attr) =>
@@ -37,24 +48,43 @@ export default class Browser {
         (els, attr) => els.map(el => el.getAttribute(attr)),
         attr
       )
-    page.$nuxt = await page.evaluateHandle('window.$nuxt')
+
+    page.$nuxt = await page.evaluateHandle(page.$nuxtGlobalHandle)
 
     page.nuxt = {
-      async navigate(path, waitEnd = true) {
-        const hook = page.evaluate(() => {
-          return new Promise(resolve =>
-            window.$nuxt.$once('routeChanged', resolve)
+      async navigate (path, waitEnd = true) {
+        const hook = page.evaluate(`
+          new Promise(resolve =>
+            ${page.$nuxtGlobalHandle}.$once('routeChanged', resolve)
           ).then(() => new Promise(resolve => setTimeout(resolve, 50)))
-        })
+        `)
         await page.evaluate(
           ($nuxt, path) => $nuxt.$router.push(path),
           page.$nuxt,
           path
         )
-        if (waitEnd) await hook
+        if (waitEnd) {
+          await hook
+        }
         return { hook }
       },
-      routeData() {
+      async go (n, waitEnd = true) {
+        const hook = page.evaluate(`
+          new Promise(resolve =>
+            ${page.$nuxtGlobalHandle}.$once('routeChanged', resolve)
+          ).then(() => new Promise(resolve => setTimeout(resolve, 50)))
+        `)
+        await page.evaluate(
+          ($nuxt, n) => $nuxt.$router.go(n),
+          page.$nuxt,
+          n
+        )
+        if (waitEnd) {
+          await hook
+        }
+        return { hook }
+      },
+      routeData () {
         return page.evaluate(($nuxt) => {
           return {
             path: $nuxt.$route.path,
@@ -62,14 +92,17 @@ export default class Browser {
           }
         }, page.$nuxt)
       },
-      loadingData() {
+      loadingData () {
         return page.evaluate($nuxt => $nuxt.$loading.$data, page.$nuxt)
       },
-      errorData() {
+      errorData () {
         return page.evaluate($nuxt => $nuxt.nuxt.err, page.$nuxt)
       },
-      storeState() {
+      storeState () {
         return page.evaluate($nuxt => $nuxt.$store.state, page.$nuxt)
+      },
+      transitionsData () {
+        return page.evaluate($nuxt => $nuxt.nuxt.transitions, page.$nuxt)
       }
     }
     return page

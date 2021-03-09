@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1>Nuxt Chat</h1>
-    <transition-group name="list" tag="ul">
+    <TransitionGroup name="list" tag="ul">
       <li v-for="(message, index) in messages" :key="index">
-        <component :is="message.component" :data="message.data" />
+        <Component :is="message.component" :data="message.data" />
       </li>
-    </transition-group>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ const components = {
   vText: () => import('@/components/text.vue' /* webpackChunkName: "components/text" */),
   vImage: () => import('@/components/image.vue' /* webpackChunkName: "components/image" */),
   vCode: () => import('@/components/code.vue' /* webpackChunkName: "components/code" */),
-  vChart: () => import('@/components/chart.js' /* webpackChunkName: "components/chart" */).then(m => m.default())
+  vChart: () => import('@/components/chart.js' /* webpackChunkName: "components/chart" */)
 }
 
 export default {
@@ -24,7 +24,7 @@ export default {
   data: () => ({
     messages: []
   }),
-  mounted() {
+  mounted () {
     // Listen for incoming messages
     streamMessages(async (message) => {
       // Wait for the component to load before displaying it

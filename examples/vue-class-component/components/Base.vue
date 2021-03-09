@@ -4,8 +4,14 @@
     <p>msg: {{ msg }}</p>
     <p>env: {{ env }}</p>
     <p>computed msg: {{ computedMsg }}</p>
-    <button @click="greet">Greet</button>
-    <p><nuxt-link to="/about">About page</nuxt-link></p>
+    <button @click="greet">
+      Greet
+    </button>
+    <p>
+      <NuxtLink to="/about">
+        About page
+      </NuxtLink>
+    </p>
   </div>
 </template>
 
@@ -21,20 +27,22 @@ export default
 })
 class Base extends Vue {
   // initial data
+  // TODO: Remove when upgrade babel-preset-env
+  // eslint-disable-next-line no-undef
   msg = 123
 
   // lifecycle hook
-  mounted() {
+  mounted () {
     this.greet()
   }
 
   // computed
-  get computedMsg() {
+  get computedMsg () {
     return 'computed ' + this.msg
   }
 
   // method
-  greet() {
+  greet () {
     console.log('base greeting: ' + this.msg) // eslint-disable-line no-console
   }
 }

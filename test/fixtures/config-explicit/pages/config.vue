@@ -1,6 +1,8 @@
 <template>
   <div>
-    <span v-for="(key, i) in configKeys" :id="key" :key="i">{{ vueConfig[key] | toStr }}</span>
+    <span v-for="(key, i) in configKeys" :id="key" :key="i">
+      {{ vueConfig[key] | toStr }}
+    </span>
   </div>
 </template>
 
@@ -9,17 +11,17 @@ import Vue from 'vue'
 
 export default {
   filters: {
-    toStr(v) {
+    toStr (v) {
       return String(v)
     }
   },
-  data() {
+  data () {
     return {
       vueConfig: Vue.config
     }
   },
   computed: {
-    configKeys: function () {
+    configKeys () {
       return Object.keys(this.vueConfig).filter(k => ['silent', 'devtools', 'performance', 'productTip'].includes(k))
     }
   }

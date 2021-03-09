@@ -12,8 +12,11 @@ export default {
     },
     ['./modules/template', { baz: 'ping' }]
   ],
-  serverMiddleware: ['./modules/middleware/midd2'],
-  hooks(hook) {
+  serverMiddleware: [
+    './modules/middleware/midd2',
+    '~/modules/middleware/midd3'
+  ],
+  hooks (hook) {
     hook('ready', (nuxt) => {
       nuxt.__ready_called__ = true
     })

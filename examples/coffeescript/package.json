@@ -1,16 +1,17 @@
 {
   "name": "example-coffeescript",
   "version": "1.0.0",
-  "description": "Nuxt.js with CoffeeScript",
+  "description": "Nuxt with CoffeeScript",
   "author": "Alex Ananiev <alex.ananiev.r@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "post-update": "yarn upgrade --latest"
   },
   "dependencies": {
-    "nuxt-edge": "latest"
+    "nuxt": "latest"
   },
   "devDependencies": {
     "coffee-loader": "^0.8.0",

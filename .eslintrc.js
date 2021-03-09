@@ -2,84 +2,91 @@ module.exports = {
   root: true,
   parserOptions: {
     parser: 'babel-eslint',
-    sourceType: 'module'
-  },
-  env: {
-    browser: true,
-    node: true,
-    'jest/globals': true
-  },
-  extends: [
-    'standard',
-    'standard-jsx',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:vue/recommended'
-  ],
-  plugins: [
-    'vue',
-    'jest'
-  ],
-  settings: {
-    'import/resolver': {
-      node: { extensions: ['.js', '.mjs'] }
+    sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true
     }
   },
-  rules: {
-    // Enforce import order
-    'import/order': 2,
-
-    // Imports should come first
-    'import/first': 2,
-
-    // Other import rules
-    'import/no-mutable-exports': 2,
-
-    // Allow unresolved imports
-    'import/no-unresolved': 0,
-
-    // Allow paren-less arrow functions only when there's no braces
-    'arrow-parens': [2, 'as-needed', { requireForBlockBody: true }],
-
-    // Allow async-await
-    'generator-star-spacing': 0,
-
-    // Allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-
-    // Prefer const over let
-    'prefer-const': [2, {
-      'destructuring': 'any',
-      'ignoreReadBeforeAssign': false
-    }],
-
-    // No single if in an "else" block
-    'no-lonely-if': 2,
-
-    // Force curly braces for control flow
-    curly: 2,
-
-    // No async function without await
-    'require-await': 2,
-
-    // Force dot notation when possible
-    'dot-notation': 2,
-
-    'no-var': 2,
-
-    // Do not allow console.logs etc...
-    'no-console': 2,
-    'space-before-function-paren': [2, {
-      anonymous: 'always',
-      named: 'never'
-    }],
-    'vue/no-parsing-error': [2, {
-      'x-invalid-end-tag': false
-    }],
-    'vue/max-attributes-per-line': [2, {
-      'singleline': 5,
-    }]
+  extends: [
+    '@nuxtjs'
+  ],
+  globals: {
+    BigInt: true
   },
-
-  globals: {}
+  rules: {
+    'no-console': 'error',
+    'no-debugger': 'error',
+    'no-template-curly-in-string': 0,
+    quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+    // https://github.com/babel/babel-eslint/issues/799
+    'template-curly-spacing': 0,
+    indent: ['error', 2, { SwitchCase: 1, ignoredNodes: ['TemplateLiteral'] }]
+  },
+  overrides: [{
+    files: ['test/fixtures/*/.nuxt*/**'],
+    rules: {
+      'vue/name-property-casing': 'error'
+    }
+  }, {
+    files: [
+      'examples/storybook/**',
+      'examples/with-element-ui/**',
+      'examples/with-museui/**',
+      'examples/with-vue-material/**',
+      'examples/with-vuetify/**',
+      'examples/with-vuikit/**',
+      'examples/with-vux/**'
+    ],
+    rules: {
+      'vue/component-name-in-template-casing': ['warn', 'kebab-case']
+    }
+  }, {
+    files: ['test/fixtures/*/.nuxt*/**/+(App|index|server|client|nuxt).js'],
+    rules: {
+      'import/order': 'off'
+    }
+  }, {
+    files: ['test/fixtures/*/.nuxt*/**/client.js'],
+    rules: {
+      'no-console': ['error', { allow: ['error'] }]
+    }
+  }, {
+    files: ['test/fixtures/*/.nuxt*/**/router.js'],
+    rules: {
+      'no-console': ['error', { allow: ['warn'] }]
+    }
+  }, {
+    files: ['test/fixtures/*/.nuxt*/**/*.html'],
+    rules: {
+      semi: ['error', 'always', { omitLastInOneLineBlock: true }],
+      'no-var': 'off'
+    }
+  }, {
+    files: ['test/fixtures/*/.nuxt*/**/nuxt-error.vue'],
+    rules: {
+      'vue/singleline-html-element-content-newline': 'off'
+    }
+  }, {
+    // might be removed in the future, see https://github.com/standard/eslint-plugin-standard/issues/27
+    files: ['test/fixtures/*/.nuxt*/**/nuxt-link.client.js'],
+    rules: {
+      'standard/no-callback-literal': 'off'
+    }
+  }, {
+    files: ['**/*.ts'],
+    env: { browser: true, es6: true, node: true },
+    extends: [
+      '@nuxtjs/eslint-config-typescript'
+    ],
+    globals: { Atomics: 'readonly', SharedArrayBuffer: 'readonly' },
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+      ecmaFeatures: { jsx: true },
+      ecmaVersion: 2018,
+      sourceType: 'module'
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 0
+    }
+  }]
 }

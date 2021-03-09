@@ -1,8 +1,8 @@
-# Using build.styleResources with Nuxt.js
+# Using build.styleResources with Nuxt
 
 This is useful when you need to inject some variables and mixins in your pages without having to import them every time.
 
-Nuxt.js uses https://github.com/yenshih/style-resources-loader to achieve this behaviour.
+Nuxt uses https://github.com/yenshih/style-resources-loader to achieve this behaviour.
 
 You need to specify the patterns/path you want to include for the given pre-processors: `css`, `less`, `sass`, `scss` or `stylus`
 
@@ -41,7 +41,7 @@ Then in your pages, you can use directly:
 <template>
   <div class="main">
     <p>Page with SCSS</p>
-    <p><nuxt-link to="/less">LESS</nuxt-link></p>
+    <p><NuxtLink to="/less">LESS</NuxtLink></p>
   </div>
 </template>
 

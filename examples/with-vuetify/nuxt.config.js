@@ -12,17 +12,14 @@ export default {
       }
     ]
   },
-
   build: {
-    extractCSS: true,
-    transpile: [/^vuetify/]
+    extractCSS: true
   },
-  /*
-  ** Load Vuetify into the app
-  */
-  plugins: ['~/plugins/vuetify'],
-  /*
-  ** Load Vuetify CSS globally
-  */
-  css: ['~/assets/app.styl']
+  buildModules: [
+    '@nuxtjs/vuetify'
+  ],
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    optionsPath: './vuetify.options.js'
+  }
 }

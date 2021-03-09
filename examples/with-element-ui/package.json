@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "element-ui": "^2",
+    "element-ui": "^2.6.3",
     "nuxt": "latest"
   },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "post-update": "yarn upgrade --latest"
   },
   "devDependencies": {
-    "node-sass": "^4.6.0",
-    "sass-loader": "^6.0.6"
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0"
   }
 }

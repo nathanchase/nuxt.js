@@ -1,8 +1,16 @@
 <template>
   <div>
-    <h4>_slug: <i data-date-child-slug>{{ date }}</i></h4>
+    <h4>
+      _slug: <i data-date-child-slug>
+        {{ date }}
+      </i>
+    </h4>
     <input ref="search" v-model="q" data-test-search-input type="text" @input="update">
-    <ul><li v-for="s in searchResults" :key="s" data-test-search-result>{{ s }}</li></ul>
+    <ul>
+      <li v-for="s in searchResults" :key="s" data-test-search-result>
+        {{ s }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -14,7 +22,7 @@ const countries = [
   'Czech Republic',
   'Netherlands'
 ]
-function search(q) {
+function search (q) {
   q = String(q || '').toLowerCase()
 
   return new Promise((resolve) => {
@@ -24,29 +32,29 @@ function search(q) {
 }
 
 export default {
-  data() {
-    return {
-      q: this.$route.query.q || ''
-    }
-  },
-  watch: {
-    '$route.query.q': async function (q) {
-      this.searchResults = await search(q)
-    }
-  },
-  async asyncData({ query }) {
+  async asyncData ({ query }) {
     const searchResults = await search(query.q)
     return {
       searchResults,
       date: Date.now()
     }
   },
-  mounted() {
+  data () {
+    return {
+      q: this.$route.query.q || ''
+    }
+  },
+  watch: {
+    async '$route.query.q' (q) {
+      this.searchResults = await search(q)
+    }
+  },
+  mounted () {
     this.$refs.search.selectionStart = this.$refs.search.selectionEnd = this.$refs.search.value.length
     this.$refs.search.focus()
   },
   methods: {
-    update() {
+    update () {
       this.$router.replace({ query: Object.assign({}, this.$route.query, { q: this.q }) })
     }
   }

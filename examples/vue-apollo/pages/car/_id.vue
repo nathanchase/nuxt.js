@@ -3,7 +3,11 @@
     <h3>{{ Car.make }} {{ Car.model }}</h3>
     <p>{{ formatCurrency(Car.price) }}</p>
     <img :src="Car.photoURL" :alt="`${Car.model} photo`">
-    <p><nuxt-link to="/">Home page</nuxt-link></p>
+    <p>
+      <NuxtLink to="/">
+        Home page
+      </NuxtLink>
+    </p>
   </div>
 </template>
 
@@ -15,24 +19,24 @@ export default {
     Car: {
       query: car,
       prefetch: ({ route }) => ({ id: route.params.id }),
-      variables() {
+      variables () {
         return { id: this.$route.params.id }
       }
     }
   },
+  head () {
+    return {
+      title: (this.Car ? `${this.Car.make} ${this.Car.model}` : 'Loading')
+    }
+  },
   methods: {
-    formatCurrency(num) {
+    formatCurrency (num) {
       const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 2
       })
       return formatter.format(num)
-    }
-  },
-  head() {
-    return {
-      title: (this.Car ? `${this.Car.make} ${this.Car.model}` : 'Loading')
     }
   }
 }

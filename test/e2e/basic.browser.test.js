@@ -1,5 +1,5 @@
 import Browser from '../utils/browser'
-import { loadFixture, getPort, Nuxt } from '../utils'
+import { loadFixture, getPort, Nuxt, waitFor } from '../utils'
 
 let port
 const browser = new Browser()
@@ -12,8 +12,10 @@ describe('basic browser', () => {
   beforeAll(async () => {
     const config = await loadFixture('basic')
     nuxt = new Nuxt(config)
+    await nuxt.ready()
+
     port = await getPort()
-    await nuxt.listen(port, 'localhost')
+    await nuxt.server.listen(port, 'localhost')
 
     await browser.start({
       // slowMo: 50,
@@ -28,32 +30,38 @@ describe('basic browser', () => {
   })
 
   test('/noloading', async () => {
-    const { hook } = await page.nuxt.navigate('/noloading')
-    const loading = await page.nuxt.loadingData()
+    const { hook } = await page.nuxt.navigate('/noloading', false)
+    await waitFor(nuxt.options.loading.throttle + 100)
+    let loading = await page.nuxt.loadingData()
     expect(loading.show).toBe(true)
     await hook
+    loading = await page.nuxt.loadingData()
     expect(loading.show).toBe(true)
     await page.waitForFunction(
-      `$nuxt.$loading.$data.show === false`
+      '$nuxt.$loading.$data.show === false'
     )
     await page.waitForFunction(
-      `document.querySelector('p').innerText === 'true'`
+      'document.querySelector(\'p\').innerText === \'true\''
     )
   })
 
   test('/stateless', async () => {
     const { hook } = await page.nuxt.navigate('/stateless', false)
-    const loading = await page.nuxt.loadingData()
 
-    expect(loading.show).toBe(true)
     await hook
     expect(await page.$text('h1')).toBe('My component!')
+  })
+
+  test('/store-module', async () => {
+    await page.nuxt.navigate('/store-module')
+    expect(await page.$text('h1')).toBe('mutated')
+    expect(await page.evaluate(() => window.__NUXT__.state.clientsideModule.initialised)).toBeTruthy()
   })
 
   test('/css', async () => {
     await page.nuxt.navigate('/css')
 
-    expect(await page.$text('.red')).toBe('This is red')
+    expect(await page.$text('.red', true)).toEqual('This is red')
     expect(await page.$eval('.red', (red) => {
       const { color, backgroundColor } = window.getComputedStyle(red)
       return { color, backgroundColor }
@@ -73,8 +81,10 @@ describe('basic browser', () => {
   test('/store', async () => {
     await page.nuxt.navigate('/store')
 
-    expect(await page.$text('h1')).toBe('Vuex Nested Modules')
-    expect(await page.$text('p')).toBe('1')
+    expect(await page.$text('h1')).toBe('foo/bar/baz: Vuex Nested Modules')
+    expect(await page.$text('h2')).toBe('index/counter: 1')
+    expect(await page.$text('h3')).toBe('foo/blarg/getVal: 4')
+    expect(await page.$text('h4')).toBe('foo/bab/getBabVal: 10')
   })
 
   test('/head', async () => {
@@ -85,33 +95,108 @@ describe('basic browser', () => {
     const metas = await page.$$attr('meta', 'content')
 
     expect(await msg).toBe('Body script!')
-    expect(await page.title()).toBe('My title - Nuxt.js')
+    expect(await page.title()).toBe('My title - Nuxt')
     expect(await page.$text('h1')).toBe('I can haz meta tags')
-    expect(metas[0]).toBe('my meta')
+    expect(metas[1]).toBe('my meta')
   })
 
   test('/async-data', async () => {
     await page.nuxt.navigate('/async-data')
 
-    expect(await page.$text('p')).toBe('Nuxt.js')
+    expect(await page.$text('p')).toBe('Nuxt')
   })
 
   test('/await-async-data', async () => {
     await page.nuxt.navigate('/await-async-data')
 
-    expect(await page.$text('p')).toBe('Await Nuxt.js')
+    expect(await page.$text('p')).toBe('Await Nuxt')
   })
 
   test('/callback-async-data', async () => {
     await page.nuxt.navigate('/callback-async-data')
 
-    expect(await page.$text('p')).toBe('Callback Nuxt.js')
+    expect(await page.$text('p')).toBe('Callback Nuxt')
   })
 
   test('/users/1', async () => {
     await page.nuxt.navigate('/users/1')
 
     expect(await page.$text('h1')).toBe('User: 1')
+  })
+
+  test('/scroll-to-top with scrollToTop set to true', async () => {
+    const page = await browser.page(url('/scroll-to-top'))
+    await page.evaluate(() => window.scrollBy(0, window.innerHeight))
+    await page.nuxt.navigate('/scroll-to-top/scroll-to-top-true')
+    const pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBe(0)
+    page.close()
+  })
+
+  test('/scroll-to-top with scrollToTop set to false', async () => {
+    const page = await browser.page(url('/scroll-to-top'))
+    await page.evaluate(() => window.scrollBy(0, window.innerHeight))
+    await page.nuxt.navigate('/scroll-to-top/scroll-to-top-false')
+    const pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    page.close()
+  })
+
+  test('/scroll-to-top in the same page', async () => {
+    const page = await browser.page(url('/scroll-to-top'))
+    await page.evaluate(() => window.scrollBy(0, window.innerHeight))
+    await page.nuxt.navigate('/scroll-to-top?test=1')
+    const pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    page.close()
+  })
+
+  test('/scroll-to-top in the same page with watchQuery: true', async () => {
+    const page = await browser.page(url('/scroll-to-top/watch-query-true'))
+    await page.evaluate(() => window.scrollBy(0, window.innerHeight))
+    await page.nuxt.navigate('/scroll-to-top/watch-query-true?test=1')
+    let pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBe(0)
+    await page.nuxt.go(-1)
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    page.close()
+  })
+
+  test('/scroll-to-top in the same page with watchQuery array', async () => {
+    const page = await browser.page(url('/scroll-to-top/watch-query-array'))
+    await page.evaluate(() => window.scrollBy(0, window.innerHeight))
+    await page.nuxt.navigate('/scroll-to-top/watch-query-array?other=1')
+    let pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    await page.nuxt.go(-1)
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    await page.nuxt.navigate('/scroll-to-top/watch-query-array?test=1')
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBe(0)
+    await page.nuxt.go(-1)
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    page.close()
+  })
+
+  test('/scroll-to-top in the same page with watchQuery function', async () => {
+    const page = await browser.page(url('/scroll-to-top/watch-query-fn'))
+    await page.evaluate(() => window.scrollBy(0, window.innerHeight))
+    await page.nuxt.navigate('/scroll-to-top/watch-query-fn?other=1')
+    let pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    await page.nuxt.go(-1)
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBeGreaterThan(0)
+    await page.nuxt.navigate('/scroll-to-top/watch-query-fn?test=1')
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBe(0)
+    await page.nuxt.go(-1)
+    pageYOffset = await page.evaluate(() => window.pageYOffset)
+    expect(pageYOffset).toBe(0)
+    page.close()
   })
 
   test('/validate should display a 404', async () => {
@@ -153,7 +238,7 @@ describe('basic browser', () => {
   test('/error', async () => {
     await page.nuxt.navigate('/error')
 
-    expect(await page.nuxt.errorData()).toEqual({ statusCode: 500 })
+    expect(await page.nuxt.errorData()).toEqual({ message: 'Error mouahahah', statusCode: 500 })
     expect(await page.$text('.title')).toBe('Error mouahahah')
   })
 
@@ -161,7 +246,7 @@ describe('basic browser', () => {
     await page.nuxt.navigate('/error2')
 
     expect(await page.$text('.title')).toBe('Custom error')
-    expect(await page.nuxt.errorData()).toEqual({ message: 'Custom error' })
+    expect(await page.nuxt.errorData()).toEqual({ message: 'Custom error', statusCode: 500, customProp: 'ezpz' })
   })
 
   test('/redirect-middleware', async () => {
@@ -177,7 +262,7 @@ describe('basic browser', () => {
     await page.nuxt.navigate('/redirect-external', false)
 
     await page.waitForFunction(
-      () => window.location.href === 'https://nuxtjs.org/'
+      () => window.location.href === 'https://nuxtjs.org/docs/2.x/features/data-fetching/'
     )
     page.close()
   })
@@ -192,12 +277,6 @@ describe('basic browser', () => {
     await page.nuxt.navigate('/no-ssr')
 
     expect(await page.$text('h1')).toBe('Displayed only on client-side')
-  })
-
-  test('/pug', async () => {
-    await page.nuxt.navigate('/pug')
-
-    expect(await page.$text('h1')).toBe('Pug page')
   })
 
   test('/meta', async () => {
@@ -228,7 +307,22 @@ describe('basic browser', () => {
     await page.nuxt.navigate('/router-guard')
 
     const p = await page.$text('p')
-    expect(p).toBe('Nuxt.js')
+    expect(p).toBe('Nuxt')
+  })
+
+  test('/refresh-page-data', async () => {
+    const page = await browser.page(url('/refresh-page-data'))
+    let h1 = await page.$text('h1')
+    expect(h1).toContain('Hello from server')
+    await page.evaluate($nuxt => $nuxt.refresh(), page.$nuxt)
+    h1 = await page.$text('h1')
+    expect(h1).toContain('Hello from client')
+    page.close()
+  })
+
+  test('/redirection/no loop', async () => {
+    const page = await browser.page(url('/redirection/no loop'))
+    expect(await page.$text('h1')).toContain('Redirected page')
   })
 
   // Close server and ask nuxt to stop listening to file changes

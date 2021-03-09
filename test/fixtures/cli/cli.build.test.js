@@ -1,21 +1,20 @@
-import { exec } from 'child_process'
-import { resolve } from 'path'
-import { promisify } from 'util'
+import { NuxtCommand, commands } from '@nuxt/cli'
+import consola from 'consola'
 
-const execify = promisify(exec)
-const rootDir = __dirname
-const nuxtBin = resolve(__dirname, '..', '..', '..', 'bin', 'nuxt')
-
-describe.skip.appveyor('cli build', () => {
+describe('cli build', () => {
   test('nuxt build', async () => {
-    const { stdout } = await execify(`node ${nuxtBin} build ${rootDir} -c cli.build.config.js`)
+    const buildCommand = await commands.default('build')
 
-    expect(stdout.includes('Compiled successfully')).toBe(true)
-  }, 80000)
+    const argv = [
+      __dirname,
+      '--no-force-exit',
+      '-c',
+      'cli.build.config.js'
+    ]
 
-  test('nuxt build -> error config', async () => {
-    await expect(execify(`node ${nuxtBin} build ${rootDir} -c config.js`)).rejects.toMatchObject({
-      stdout: expect.stringContaining('Could not load config file: config.js')
-    })
+    const cmd = new NuxtCommand(buildCommand, argv)
+    await expect(cmd.run()).resolves.toBeUndefined()
+
+    expect(consola.log).toBeCalledWith('Compiled successfully')
   })
 })

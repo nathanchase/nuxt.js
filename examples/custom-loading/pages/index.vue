@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <p>Hello {{ name }}!</p>
-    <nuxt-link to="/about">Go to /about</nuxt-link>
+    <NuxtLink to="/about">
+      Go to /about
+    </NuxtLink>
   </div>
 </template>
 
 <script>
 export default {
-  asyncData() {
+  asyncData () {
     return new Promise((resolve) => {
       setTimeout(function () {
         resolve({ name: 'world' })

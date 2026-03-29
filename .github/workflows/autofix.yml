@@ -1,0 +1,63 @@
+name: autofix.ci # needed to securely identify the workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 4.x
+      - 3.x
+      - '!v[0-9]*'
+    paths-ignore:
+      - "docs/**"
+
+permissions:
+  contents: read
+
+jobs:
+  code:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check engine ranges, peer dependency ranges and installed versions
+        run: pnpm test:engines:fix
+
+      - name: Build (stub)
+        run: pnpm dev:prepare
+
+      - name: Test (nuxt runtime)
+        run: pnpm test:runtime -u
+
+      - name: Test (unit)
+        run: pnpm test:unit -u
+
+      - name: Lint (code)
+        run: pnpm lint:fix
+
+      - name: Build
+        run: pnpm build
+
+      - name: Assert bundle size (renovate)
+        if: ${{ contains(github.head_ref, 'renovate') }}
+        run: pnpm vitest run bundle
+
+      - name: Update bundle size (renovate)
+        if: failure()
+        run: |
+          pnpm vitest run bundle -u
+          pnpm dedupe
+
+      - name: Update bundle size
+        if: ${{ !contains(github.head_ref, 'renovate') }}
+        run: pnpm vitest run bundle -u
+
+      - uses: autofix-ci/action@7a166d7532b277f34e16238930461bf77f9d7ed8 # 7a166d7532b277f34e16238930461bf77f9d7ed8

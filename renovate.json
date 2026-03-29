@@ -1,24 +1,63 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "@nuxtjs"
+    "github>nuxt/renovate-config-nuxt",
+    ":pinDevDependencies",
+    ":widenPeerDependencies"
   ],
-  "baseBranches": [
-    "dev"
+  "baseBranchPatterns": [
+    "main",
+    "4.x",
+    "3.x"
   ],
   "ignoreDeps": [
-    "core-js",
-    "postcss",
-    "postcss-import",
-    "postcss-loader",
-    "postcss-url",
-    "css-loader",
-    "sass-loader",
-    "npm",
-    "html-webpack-plugin",
-    "terser-webpack-plugin",
-    "@types/terser-webpack-plugin"
+    "node",
+    "npm"
   ],
-  "lockFileMaintenance": {
-    "enabled": true
+  "packageRules": [
+    {
+      "groupName": "webpack",
+      "matchPackageNames": [
+        "/webpack/",
+        "/-loader/"
+      ]
+    },
+    {
+      "groupName": "vitest",
+      "matchPackageNames": [
+        "vitest",
+        "/^@vitest//"
+      ]
+    },
+    {
+      "matchBaseBranches": [
+        "main",
+        "4.x",
+        "3.x"
+      ],
+      "ignoreDeps": [
+        "nuxt",
+        "nuxt3",
+        "@nuxt/kit"
+      ]
+    },
+    {
+      "matchBaseBranches": [
+        "4.x",
+        "3.x"
+      ],
+      "groupName": "all dependencies",
+      "groupSlug": "all",
+      "matchPackageNames": [
+        "*"
+      ]
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "postUpdateOptions": [
+      "pnpmDedupe"
+    ],
+    "groupName": "all dependencies",
+    "groupSlug": "all"
   }
 }

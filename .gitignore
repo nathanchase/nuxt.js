@@ -2,27 +2,36 @@
 node_modules
 jspm_packages
 
-# Only keep yarn.lock in the root
 package-lock.json
+packages/*/README.md
+!packages/nuxi/README.md
+packages/*/LICENSE
+!packages/nuxt/test/package-fixture/root/node_modules
+docs/LICENSE
 */**/yarn.lock
+/.yarn
 
 # Logs
 *.log
 
-# Packages
-packages/*/LICENSE
-
-# Distributions
-distributions/*/LICENSE
-
-# Other
-.nuxt*
-!.nuxtignore
-!.nuxtrc
+# Temp directories
+.temp
+.tmp
 .cache
 
-# Dist folders
+# Lychee cache
+.lycheecache
+
+# Generated dirs
 dist
+.nuxt
+.nuxt-*
+.vercel
+.netlify
+.output
+.output-*
+.gen
+.test
 
 # Junit reports
 reports
@@ -38,6 +47,13 @@ coverage
 # Intellij idea
 *.iml
 .idea
+!.idea/nuxt.iml
+!.idea/modules.xml
+!.idea/inspectionProfiles/Project_Default.xml
+
+# AI config 
+.agents
+.claude
 
 # OSX
 .DS_Store
@@ -59,4 +75,19 @@ coverage
 Network Trash Folder
 Temporary Items
 .apdisk
-CHANGELOG.md
+
+.vercel_build_output
+.build-*
+.env
+.netlify
+
+fixtures-temp
+.pnpm-store
+eslint-typegen.d.ts
+.eslintcache
+test-results/
+playwright-report
+
+temp
+
+packages/ui-templates/node-compile-cache/

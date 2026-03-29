@@ -1,153 +1,119 @@
-<p align="center"><img align="center" style="width:320px" src="./.github/nuxt.png"/></p><br/>
-<p align="center">
-  <a href="https://github.com/nuxt/nuxt.js/actions?query=branch%3Adev+event%3Apush"><img src="https://github.com/nuxt/nuxt.js/workflows/test/badge.svg?branch=dev&event=push" alt="Tests Status"></a>
-  <a href="https://github.com/nuxt/nuxt.js/actions?query=branch%3Adev+event%3Apush"><img src="https://github.com/nuxt/nuxt.js/workflows/windows/badge.svg?branch=dev&event=push" alt="Windows Status"></a>
-  <a href="https://codecov.io/gh/nuxt/nuxt.js"><img src="https://badgen.net/codecov/c/github/nuxt/nuxt.js/master" alt="Coverage Status"></a>
-  <a href="https://www.npmjs.com/package/nuxt"><img src="https://badgen.net/npm/dm/nuxt" alt="Downloads"></a>
-  <a href="https://www.npmjs.com/package/nuxt"><img src="https://badgen.net/npm/v/nuxt" alt="Version"></a>
-  <a href="https://www.npmjs.com/package/nuxt"><img src="https://badgen.net/npm/license/nuxt" alt="License"></a>
-  <a href="https://discord.nuxtjs.org/"><img src="https://badgen.net/badge/Discord/join-us/7289DA" alt="Discord"></a>
- </p>
- <p align="center">
-  <a href="#platinum-sponsors" alt="Platinum Sponsors on Open Collective"><img src="https://opencollective.com/nuxtjs/tiers/platinum-sponsors/badge.svg" /></a>
-  <a href="#gold-sponsors" alt="Gold Sponsors on Open Collective"><img src="https://opencollective.com/nuxtjs/tiers/gold-sponsors/badge.svg" /></a>
-  <a href="#silver-sponsors" alt="Silver Sponsors on Open Collective"><img src="https://opencollective.com/nuxtjs/tiers/silver-sponsors/badge.svg" /></a>
-  <a href="#bronze-sponsors" alt="Bronze Sponsors on Open Collective"><img src="https://opencollective.com/nuxtjs/tiers/bronze-sponsors/badge.svg" /></a>
-  <a href="#nuxters" alt="Nuxters on Open Collective"><img src="https://opencollective.com/nuxtjs/tiers/nuxters/badge.svg" /></a>
-  <a href="https://oc.nuxtjs.org/"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-</p>
-<p align="center">
-  <a href="https://otechie.com/nuxt?ref=badge"><img src="https://api.otechie.com/consultancy/nuxt/badge.svg" alt="Hire Nuxt"></a>
+<a href="https://nuxt.com"><img width="830" height="213" src="./.github/assets/banner.svg" alt="Nuxt banner"></a>
+
+# Nuxt
+
+<p>
+  <a href="https://npmx.dev/package/nuxt"><img src="https://npmx.dev/api/registry/badge/version/nuxt" alt="Version"></a>
+  <a href="https://npmx.dev/package/nuxt"><img src="https://npmx.dev/api/registry/badge/downloads/nuxt" alt="Downloads"></a>
+  <a href="https://github.com/nuxt/nuxt/blob/main/LICENSE"><img src="https://img.shields.io/github/license/nuxt/nuxt.svg?style=flat&colorA=18181B&colorB=28CF8D" alt="License"></a>
+  <a href="https://nuxt.com/modules"><img src="https://img.shields.io/badge/dynamic/json?url=https://nuxt.com/api/v1/modules&query=$.stats.modules&label=Modules&style=flat&colorA=18181B&colorB=28CF8D" alt="Modules"></a>
+  <a href="https://nuxt.com"><img src="https://img.shields.io/badge/Nuxt%20Docs-18181B?logo=nuxt" alt="Website"></a>
+  <a href="https://chat.nuxt.dev"><img src="https://img.shields.io/badge/Nuxt%20Discord-18181B?logo=discord" alt="Discord"></a>
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/nuxt/nuxt"><img src="https://api.securityscorecards.dev/projects/github.com/nuxt/nuxt/badge" alt="Nuxt openssf scorecard score"></a>
+  <a href="https://deepwiki.com/nuxt/nuxt"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
-> Build your next Vue.js application with confidence using Nuxt: a framework making web development simple and powerful.
+Nuxt is a free and open-source framework with an intuitive and extendable way to create type-safe, performant and production-grade full-stack web applications and websites with Vue.js.
 
-## Links
+It provides a number of features that make it easy to build fast, SEO-friendly, and scalable web applications, including:
+- Server-side rendering, static site generation, hybrid rendering and edge-side rendering
+- Automatic routing with code-splitting and pre-fetching
+- Data fetching and state management
+- Search engine optimization and defining meta tags
+- Auto imports of components, composables and utils
+- TypeScript with zero configuration
+- Go full-stack with our server/ directory
+- Extensible with [300+ modules](https://nuxt.com/modules)
+- Deployment to a variety of [hosting platforms](https://nuxt.com/deploy)
+- ...[and much more](https://nuxt.com) 🚀
 
-- 📘 Documentation: [https://nuxtjs.org](https://nuxtjs.org)
-- 👥 Community: [cmty.app/nuxt](https://cmty.app/nuxt)
-- 🎬 Video: [1 minute demo](https://www.youtube.com/watch?v=kmf-p-pTi40)
-- 🐦 Twitter: [@nuxt_js](https://twitter.nuxtjs.org/)
-- 💬 Chat: [Discord](https://discord.nuxtjs.org/)
-- 🌟 [AwesomeNuxt](https://awesome.nuxtjs.org/)
-- 👉 [Play with Nuxt online](https://template.nuxtjs.org)
+### Table of Contents
 
-## Features
+- 🚀 [Getting Started](#getting-started)
+- 💻 [Vue Development](#vue-development)
+- 📖 [Documentation](#documentation)
+- 🧩 [Modules](#modules)
+- ❤️ [Contribute](#contribute)
+- 🏠 [Local Development](#local-development)
+- 🛟 [Professional Support](#professional-support)
+- 🔗 [Follow Us](#follow-us)
+- ⚖️ [License](#license)
 
-- Automatic transpilation and bundling (with webpack and babel)
-- Hot code reloading
-- Server-side rendering OR Single Page App OR Static Generated, you choose :fire:
-- Static file serving. `./static/` is mapped to `/`
-- Configurable with a `nuxt.config.js` file
-- Custom layouts with the `layouts/` directory
-- Middleware
-- Code splitting for every `pages/`
-- Loading just the critical CSS (page-level)
+---
 
-Learn more at <https://nuxtjs.org>.
+## <a name="getting-started">🚀 Getting Started</a>
 
-## Getting started
-
-```sh
-$ npx create-nuxt-app <project-name>
-```
-
-It's as simple as that!
-
-Learn more at https://nuxtjs.org/guide/installation
-
-## Examples
-
-Please take a look at <https://nuxtjs.org/examples> or directly in <https://github.com/nuxt/nuxt.js/tree/dev/examples>.
-
-## Production deployment
-
-To deploy, instead of running nuxt, you probably want to build ahead of time. Therefore, building and starting are separate commands:
+Use the following command to create a new starter project. This will create a starter project with all the necessary files and dependencies:
 
 ```bash
-nuxt build
-nuxt start
+npm create nuxt@latest <my-project>
 ```
 
-Learn more at https://nuxtjs.org/guide/commands#production-deployment
+> [!TIP]
+> Discover also [nuxt.new](https://nuxt.new): Open a Nuxt starter on CodeSandbox, StackBlitz or locally to get up and running in a few seconds.
 
-## Consulting from the Nuxt team
+## <a name="vue-development">💻 Vue Development</a>
 
-Get help with that tough bug or make sure your Nuxt app is ready to deploy. For $250 an hour, get technical support, advice, code reviews, and development from the Nuxt core team: [Hire Nuxt on Otechie](https://otechie.com/nuxt?ref=readme)
+Simple, intuitive and powerful, Nuxt lets you write Vue components in a way that makes sense. Every repetitive task is automated, so you can focus on writing your full-stack Vue application with confidence.
 
-## Professional support with TideLift
+Example of an `app.vue`:
 
-Professionally supported Nuxt is now available!
+```vue
+<script setup lang="ts">
+useSeoMeta({
+  title: 'Meet Nuxt',
+  description: 'The Intuitive Vue Framework.',
+})
+</script>
 
-Tidelift gives software development teams a single source for purchasing and maintaining their software, with professional grade assurances from the experts who know it best, while seamlessly integrating with existing tools.
+<template>
+  <div id="app">
+    <AppHeader />
+    <NuxtPage />
+    <AppFooter />
+  </div>
+</template>
 
-[Get supported Nuxt with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-nuxt?utm_source=npm-nuxt&utm_medium=readme).
+<style scoped>
+#app {
+  background-color: #020420;
+  color: #00DC82;
+}
+</style>
+```
 
-## Supporting Nuxt
+## <a name="documentation">📖 Documentation</a>
 
-Nuxt is an MIT-licensed open source project with its ongoing development made possible entirely by the support of these awesome backers.
-Funds donated via OpenCollective are managed with transparent expenses and will be used for compensating work and expenses for core team members or sponsoring community events.
+We highly recommend you take a look at the [Nuxt documentation](https://nuxt.com/docs) to level up. It’s a great resource for learning more about the framework. It covers everything from getting started to advanced topics.
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/nuxtjs#contribute)]
+## <a name="modules">🧩 Modules</a>
 
-### Platinum Sponsors
+Discover our [list of modules](https://nuxt.com/modules) to supercharge your Nuxt project, created by the Nuxt team and community.
 
-[![Open Collective Platinum Sponsors][platinum-sponsors-src]][platinum-sponsors-href]
+## <a name="contribute">❤️ Contribute</a>
 
-### Gold Sponsors
+We invite you to contribute and help improve Nuxt 💚
 
-[![Open Collective Gold Sponsors][gold-sponsors-src]][gold-sponsors-href]
+Here are a few ways you can get involved:
+- **Reporting Bugs:** If you come across any bugs or issues, please check out the [reporting bugs guide](https://nuxt.com/docs/4.x/community/reporting-bugs) to learn how to submit a bug report.
+- **Suggestions:** Have ideas to enhance Nuxt? We'd love to hear them! Check out the [contribution guide](https://nuxt.com/docs/4.x/community/contribution) to share your suggestions.
+- **Questions:** If you have questions or need assistance, the [getting help guide](https://nuxt.com/docs/4.x/community/getting-help) provides resources to help you out.
 
-### Silver Sponsors
+## <a name="local-development">🏠 Local Development</a>
 
-[![Open Collective Silver Sponsors][silver-sponsors-src]][silver-sponsors-href]
+Follow the docs to [Set Up Your Local Development Environment](https://nuxt.com/docs/4.x/community/framework-contribution#setup) to contribute to the framework and documentation.
 
-### Bronze Sponsors
+## <a name="professional-support">🛟 Professional Support</a>
 
-[![Open Collective Bronze Sponsors][bronze-sponsors-src]][bronze-sponsors-href]
+- Technical audit & consulting: [Nuxt Experts](https://nuxt.com/enterprise/support)
+- Custom development & more: [Nuxt Agencies Partners](https://nuxt.com/enterprise/agencies)
 
-## Contributors
+## <a name="follow-us">🔗 Follow Us</a>
 
-Thank you to all our [contributors](https://github.com/nuxt/nuxt.js/graphs/contributors)!
+<p valign="center">
+  <a href="https://go.nuxt.com/discord"><img width="20" src="./.github/assets/discord.svg" alt="Discord"></a>&nbsp;&nbsp;<a href="https://go.nuxt.com/x"><img width="20" src="./.github/assets/twitter.svg" alt="Twitter"></a>&nbsp;&nbsp;<a href="https://go.nuxt.com/github"><img width="20" src="./.github/assets/github.svg" alt="GitHub"></a>&nbsp;&nbsp;<a href="https://go.nuxt.com/bluesky"><img width="20" src="./.github/assets/bluesky.svg" alt="Bluesky"></a>
+</p>
 
-[![Nuxt Contributors][contributors-src]][contributors-href]
+## <a name="license">⚖️ License</a>
 
-## Contributing
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/nuxt/nuxt.js)
-
-Please refer to our [Contribution Guide](https://nuxtjs.org/guide/contribution-guide#codefund_ad)
-
-## Cross-browser testing
-
-Thanks to [BrowserStack](http://browserstack.com)!
-
-<a href="http://browserstack.com"><img height="70" src="https://nuxtjs.org/browserstack.svg" alt="BrowserStack"></a>
-
-## Automated testing
-
-Thanks to [SauceLabs](https://saucelabs.com) for supporting Open Source <3
-
-<a href="https://saucelabs.com"><img height="70" src="https://nuxtjs.org/saucelabs.svg" alt="SauceLabs"></a>
-
-## Security
-
-If you discover a security vulnerability regarding Nuxt, please send an e-mail to the team via security@nuxtjs.org! All security vulnerabilities will be promptly addressed.
-
-## License
-
-[MIT](https://github.com/nuxt/nuxt.js/blob/dev/LICENSE)
-
-<!-- Open Collective Tiers -->
-[platinum-sponsors-src]: https://opencollective.com/nuxtjs/tiers/platinum-sponsors.svg?avatarHeight=96&width=890
-[platinum-sponsors-href]: https://opencollective.com/nuxtjs#contributors
-[gold-sponsors-src]: https://opencollective.com/nuxtjs/tiers/gold-sponsors.svg?avatarHeight=80&width=890
-[gold-sponsors-href]: https://opencollective.com/nuxtjs#contributors
-[silver-sponsors-src]: https://opencollective.com/nuxtjs/tiers/silver-sponsors.svg?avatarHeight=64&width=890
-[silver-sponsors-href]: https://opencollective.com/nuxtjs#contributors
-[bronze-sponsors-src]: https://opencollective.com/nuxtjs/tiers/bronze-sponsors.svg?avatarHeight=48&width=890
-[bronze-sponsors-href]: https://opencollective.com/nuxtjs#contributors
-[nuxters-src]: https://opencollective.com/nuxtjs/tiers/nuxters.svg?width=890&button=false
-[nuxters-href]: https://opencollective.com/nuxtjs#contributors
-[contributors-src]: https://opencollective.com/nuxtjs/contributors.svg?width=890&button=false
-[contributors-href]: https://github.com/nuxt/nuxt.js/graphs/contributors
+[MIT](https://github.com/nuxt/nuxt/blob/main/LICENSE)

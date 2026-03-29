@@ -1,6 +1,8 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
-  - name: ❗️ All other issues | 其他问题
-    url: https://discord.nuxtjs.org/
-    about: |
-      Please use our Discord server for other issues and asking questions.
+  - name: 📚 Nuxt Documentation
+    url: https://nuxt.com/docs
+    about: Check the documentation for usage of Nuxt
+  - name: 💬 Discussions
+    url: https://github.com/nuxt/nuxt/discussions
+    about: Use discussions if you have another issue, an idea for improvement or for asking questions.
